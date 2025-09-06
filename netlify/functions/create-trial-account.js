@@ -102,8 +102,9 @@ exports.handler = async (event, context) => {
       console.error('Auth error:', authError);
       
       // Check if user already exists
-      if (authError.message.includes('already registered')) {
-        
+ if (authError.code === 'email_exists' || 
+      authError.message.includes('already registered') || 
+      authError.message.includes('email address has already been registered')) {        
         // Send a "welcome back" email to existing user
         const existingUserEmailHtml = `
           <!DOCTYPE html>
