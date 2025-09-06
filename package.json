@@ -1,6 +1,7 @@
 {
-  "name": "netlify-functions",
+  "name": "zivvy-website",
   "version": "1.0.0",
+  "description": "Zivvy website and functions",
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0"
   }
