@@ -3,6 +3,52 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Primary Meta Tags -->
+  <title>Zivvy - Daily Therapy Homework App for Special Needs Families | Start Free</title>
+  <meta name="title" content="Zivvy - Daily Therapy Homework App for Special Needs Families | Start Free">
+  <meta name="description" content="Transform your child's therapy homework into manageable daily routines. Smart scheduling, gentle reminders, progress tracking. Trusted by 2,847+ families. Start 5-day free trial.">
+  <meta name="keywords" content="therapy homework app, special needs parenting, speech therapy exercises, occupational therapy app, physical therapy tracker, autism therapy app, child development app, therapy reminder app, special needs schedule, therapy progress tracking">
+  <meta name="author" content="Zivvy">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zivvy.app/">
+  <meta property="og:title" content="Zivvy - Turn Therapy Homework Into Daily Wins">
+  <meta property="og:description" content="Stop feeling guilty about missed therapy exercises. Zivvy helps families stay consistent with smart scheduling and gentle reminders. 5-day free trial.">
+  <meta property="og:image" content="https://zivvy.app/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Zivvy">
+  <meta property="og:locale" content="en_US">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://zivvy.app/">
+  <meta property="twitter:title" content="Zivvy - Daily Therapy Homework Made Simple">
+  <meta property="twitter:description" content="Smart scheduling for therapy exercises that works around real life. Join 2,847+ families making progress. Start free.">
+  <meta property="twitter:image" content="https://zivvy.app/assets/twitter-image.jpg">
+  <meta property="twitter:site" content="@zivvyapp">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://zivvy.app/">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#6b5b95">
+  
+  <!-- Additional SEO Tags -->
+  <meta name="application-name" content="Zivvy">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Zivvy">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  
   <title>Zivvy – Daily therapy made simple for special needs families</title>
   <meta name="description" content="Transform your child's therapy homework into a calm daily rhythm. Smart scheduling, gentle reminders, progress tracking. Start free." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1468,6 +1514,9 @@ document.querySelector('header .btn-primary').addEventListener('click', function
 });
 
 // Handle lead form submission
+
+// In the leadForm submission handler, replace the existing code with:
+
 document.getElementById('leadForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   
@@ -1481,10 +1530,33 @@ document.getElementById('leadForm').addEventListener('submit', async function(e)
     type: 'trial_signup'
   };
   
-  const submitBtn = this.querySelector('button[type="submit"]');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = 'Creating your account...';
-  submitBtn.disabled = true;
+  // Show animated loading state
+  this.innerHTML = `
+    <div style="text-align: center; padding: 40px 0;">
+      <div style="margin-bottom: 24px;">
+        <div style="width: 60px; height: 60px; border: 4px solid #f0f0f0; border-top: 4px solid var(--purple); border-radius: 50%; margin: 0 auto; animation: spin 1s linear infinite;"></div>
+      </div>
+      <h3 style="color: var(--purple); margin-bottom: 12px;" id="loadingTitle">Creating your account...</h3>
+      <p style="color: var(--text-mid); font-size: 14px;" id="loadingMessage">Setting up your personalized therapy schedule</p>
+    </div>
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  `;
+  
+  // Update messages during loading
+  setTimeout(() => {
+    const msg = document.getElementById('loadingMessage');
+    if (msg) msg.textContent = 'Generating your login credentials...';
+  }, 1500);
+  
+  setTimeout(() => {
+    const msg = document.getElementById('loadingMessage');
+    if (msg) msg.textContent = 'Almost ready! Sending your welcome email...';
+  }, 3000);
   
   try {
     const response = await fetch('/.netlify/functions/create-trial-account', {
@@ -1498,29 +1570,169 @@ document.getElementById('leadForm').addEventListener('submit', async function(e)
     const result = await response.json();
     
     if (result.success) {
-      // Show success message
-      this.innerHTML = `
-        <div style="text-align: center; padding: 40px 0;">
-          <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
-          <h3 style="color: var(--purple); margin-bottom: 16px;">Welcome to Zivvy!</h3>
-          <p style="color: var(--text-mid); margin-bottom: 24px;">
-            Check your email for your login details and app download links.
-          </p>
-          <button onclick="closeLead()" style="padding: 12px 32px; background: var(--purple); color: white; border: none; border-radius: 100px; font-size: 16px; font-weight: 600; cursor: pointer;">
-            Got it!
-          </button>
-        </div>
-      `;
+      // Check if existing user
+      if (result.existing) {
+        this.innerHTML = `
+          <div style="text-align: center; padding: 40px 0;">
+            <div style="font-size: 48px; margin-bottom: 16px;">👋</div>
+            <h3 style="color: var(--purple); margin-bottom: 16px;">Welcome Back!</h3>
+            <p style="color: var(--text-mid); margin-bottom: 24px;">
+              You already have a Zivvy account!<br>
+              Check your email for login instructions.
+            </p>
+            <button onclick="closeLead()" style="padding: 12px 32px; background: var(--purple); color: white; border: none; border-radius: 100px; font-size: 16px; font-weight: 600; cursor: pointer;">
+              Got it!
+            </button>
+          </div>
+        `;
+      } else {
+        // New user success
+        this.innerHTML = `
+          <div style="text-align: center; padding: 40px 0;">
+            <div style="font-size: 48px; margin-bottom: 16px; animation: bounce 1s ease;">✅</div>
+            <h3 style="color: var(--purple); margin-bottom: 16px;">Welcome to Zivvy!</h3>
+            <p style="color: var(--text-mid); margin-bottom: 24px;">
+              Your account is ready!<br>
+              Check your email for login details and app download links.
+            </p>
+            <button onclick="closeLead()" style="padding: 12px 32px; background: var(--purple); color: white; border: none; border-radius: 100px; font-size: 16px; font-weight: 600; cursor: pointer;">
+              Check My Email
+            </button>
+          </div>
+          <style>
+            @keyframes bounce {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.2); }
+            }
+          </style>
+        `;
+      }
     } else {
       throw new Error('Failed to create account');
     }
   } catch (error) {
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
-    alert('Sorry, there was an error creating your account. Please try again or contact us at hello@zivvy.app');
+    // Show error state
+    this.innerHTML = `
+      <div style="text-align: center; padding: 40px 0;">
+        <div style="font-size: 48px; margin-bottom: 16px;">😕</div>
+        <h3 style="color: var(--purple); margin-bottom: 16px;">Oops! Something went wrong</h3>
+        <p style="color: var(--text-mid); margin-bottom: 24px;">
+          We couldn't create your account right now.<br>
+          Please try again or email us at hello@zivvy.app
+        </p>
+        <button onclick="location.reload()" style="padding: 12px 32px; background: var(--purple); color: white; border: none; border-radius: 100px; font-size: 16px; font-weight: 600; cursor: pointer;">
+          Try Again
+        </button>
+      </div>
+    `;
   }
 });
+
+
 </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "Zivvy",
+    "description": "Daily therapy homework app for special needs families. Smart scheduling, gentle reminders, progress tracking.",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "iOS, Android",
+    "offers": {
+      "@type": "Offer",
+      "price": "5.00",
+      "priceCurrency": "USD",
+      "priceValidUntil": "2025-12-31",
+      "availability": "https://schema.org/InStock",
+      "description": "5-day free trial, then $5/month"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "2847"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "Zivvy",
+      "url": "https://zivvy.app",
+      "email": "hello@zivvy.app",
+      "sameAs": [
+        "https://facebook.com/zivvyapp",
+        "https://instagram.com/zivvyapp"
+      ]
+    }
+  }
+  </script>
+  
+  <!-- Organization Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Zivvy",
+    "url": "https://zivvy.app",
+    "logo": "https://zivvy.app/assets/logo.png",
+    "description": "Making therapy homework manageable for special needs families",
+    "email": "hello@zivvy.app",
+    "sameAs": [
+      "https://facebook.com/zivvyapp",
+      "https://instagram.com/zivvyapp"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "",
+      "contactType": "customer support",
+      "email": "hello@zivvy.app",
+      "availableLanguage": "English"
+    }
+  }
+  </script>
+  
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does Zivvy cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Zivvy offers a 5-day free trial with no credit card required. After that, it's just $5/month for unlimited access to all features."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What types of therapy does Zivvy support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Zivvy supports speech therapy, occupational therapy, physical therapy, and behavioral therapy exercises. You can add custom exercises from any therapy type."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can multiple family members use Zivvy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! Both parents, grandparents, and caregivers can all access the same schedule and track progress together."
+        }
+      }
+    ]
+  }
+  </script>
+  
+  <!-- Preconnect to external domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://unpkg.com">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Scripts -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
 </body>
 </html>
