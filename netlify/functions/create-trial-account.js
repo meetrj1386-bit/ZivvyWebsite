@@ -1,9 +1,13 @@
+// netlify/functions/create-trial-account.js
 const https = require('https');
+
+// Initialize Supabase Admin Client
+const { createClient } = require('@supabase/supabase-js');
 
 // Generate a readable temporary password
 function generateTempPassword() {
   const words = ['Welcome', 'Start', 'Begin', 'Happy', 'Family'];
-  const numbers = Math.floor(Math.random() * 900) + 100; // 3-digit number
+  const numbers = Math.floor(Math.random() * 900) + 100;
   const special = '!';
   return words[Math.floor(Math.random() * words.length)] + numbers + special;
 }
@@ -27,13 +31,90 @@ exports.handler = async (event, context) => {
       };
     }
 
+    // Initialize Supabase admin client
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Supabase credentials not configured');
+      throw new Error('Server configuration error');
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
+
     // Generate temporary password
     const tempPassword = generateTempPassword();
 
-    // Store lead info (you'll need to add Supabase integration here)
-    // For now, we'll just send emails
+    // Create user in Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email: email.toLowerCase().trim(),
+      password: tempPassword,
+      email_confirm: true, // Auto-confirm email
+      user_metadata: {
+        parent_name: name,
+        source: 'website_trial',
+        child_age: childAge,
+        primary_concern: primaryConcern,
+        trial_started: new Date().toISOString()
+      }
+    });
 
-    // Email to new user
+    if (authError) {
+      console.error('Auth error:', authError);
+      
+      // Check if user already exists
+      if (authError.message.includes('already registered')) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ 
+            error: 'This email is already registered. Please sign in instead.',
+            code: 'USER_EXISTS'
+          })
+        };
+      }
+      
+      throw authError;
+    }
+
+    // Insert into user_profiles table
+    const { error: profileError } = await supabase
+      .from('user_profiles')
+      .insert({
+        user_id: authData.user.id,
+        email: email.toLowerCase().trim(),
+        parent_name: name,
+        phone: phone || null,
+        child_age_range: childAge,
+        primary_concern: primaryConcern,
+        source: 'website_trial',
+        trial_started_at: new Date().toISOString(),
+        created_at: new Date().toISOString()
+      });
+
+    if (profileError) {
+      console.error('Profile error:', profileError);
+      // Continue anyway - user can still login
+    }
+
+    // Store lead information for marketing
+    const { error: leadError } = await supabase
+      .from('trial_leads')
+      .insert({
+        email: email.toLowerCase().trim(),
+        name: name,
+        phone: phone || null,
+        child_age: childAge,
+        primary_concern: primaryConcern,
+        status: 'trial_started',
+        created_at: new Date().toISOString()
+      });
+
+    // Email HTML content
     const userEmailHtml = `
       <!DOCTYPE html>
       <html>
@@ -64,8 +145,7 @@ exports.handler = async (event, context) => {
                     </h2>
                     
                     <p style="color: #4b5563; font-size: 16px; line-height: 1.8; margin: 0 0 30px 0;">
-                      We're so excited to help you build consistent therapy routines with your child. 
-                      Your account is ready!
+                      Your account is ready! Here's everything you need to get started with Zivvy.
                     </p>
                     
                     <!-- Login Credentials Box -->
@@ -75,44 +155,27 @@ exports.handler = async (event, context) => {
                         <strong>Email:</strong> ${email}
                       </p>
                       <p style="margin: 0; color: #2C2546; font-size: 16px;">
-                        <strong>Temporary Password:</strong> ${tempPassword}
+                        <strong>Temporary Password:</strong> <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-family: monospace;">${tempPassword}</span>
                       </p>
                       <p style="margin: 16px 0 0 0; color: #87a08e; font-size: 14px; font-style: italic;">
                         ✨ You'll be prompted to create your own password on first login
                       </p>
                     </div>
 
-                    <!-- App Download Section -->
-                    <div style="background: #f8f8f8; border-radius: 12px; padding: 24px; margin: 30px 0; text-align: center;">
-                      <h3 style="color: #2C2546; margin: 0 0 16px 0;">Download the Zivvy App</h3>
-                      <p style="color: #4b5563; margin: 0 0 20px 0; font-size: 14px;">
-                        Available on iOS and Android (Coming Soon)
-                      </p>
-                      <!-- Placeholder for app store buttons -->
-                      <p style="color: #87a08e; font-size: 14px; margin: 0;">
-                        App store links will be sent as soon as they're available!
-                      </p>
-                    </div>
-
                     <!-- Next Steps -->
-                    <h3 style="color: #2C2546; margin: 30px 0 16px 0;">Your First Steps:</h3>
+                    <h3 style="color: #2C2546; margin: 30px 0 16px 0;">Quick Start Guide:</h3>
                     <ol style="color: #4b5563; font-size: 16px; line-height: 1.8; padding-left: 20px;">
                       <li>Download the Zivvy app (links coming soon)</li>
                       <li>Sign in with your email and temporary password</li>
-                      <li>Set up your child's profile and therapy schedule</li>
-                      <li>Start your first exercise - we'll guide you!</li>
+                      <li>Set up ${childAge} year old's profile</li>
+                      <li>Add your ${primaryConcern} therapy exercises</li>
+                      <li>Watch Zivvy create your perfect schedule!</li>
                     </ol>
 
-                    <!-- CTA Button -->
-                    <div style="text-align: center; margin: 40px 0;">
-                      <a href="https://zivvy.app" style="display: inline-block; padding: 16px 36px; background: linear-gradient(135deg, #6b5b95, #5a4a7d); color: #ffffff; text-decoration: none; border-radius: 100px; font-weight: bold; font-size: 16px;">
-                        Visit Zivvy Dashboard
-                      </a>
-                    </div>
-
+                    <!-- Support -->
                     <p style="color: #87a08e; font-size: 14px; text-align: center; margin: 30px 0 0 0; padding-top: 30px; border-top: 1px solid #f0f0f0;">
-                      Need help? Reply to this email or contact us at hello@zivvy.app<br>
-                      We're here to support your journey!
+                      Questions? Reply to this email or contact us at hello@zivvy.app<br>
+                      We're here to help you succeed!
                     </p>
                   </td>
                 </tr>
@@ -121,10 +184,10 @@ exports.handler = async (event, context) => {
                 <tr>
                   <td style="background: #2C2546; padding: 30px; text-align: center;">
                     <p style="margin: 0 0 10px 0; color: #C9E4B4; font-size: 16px; font-weight: 600;">
-                      Your 5-day trial includes everything!
+                      Your trial includes everything!
                     </p>
                     <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 14px;">
-                      Unlimited exercises • Smart scheduling • Progress tracking • No credit card required
+                      No limits • No credit card • Just results
                     </p>
                     <p style="margin: 20px 0 0 0; color: rgba(255,255,255,0.5); font-size: 12px;">
                       © 2024 Zivvy. Made with 💜 by parents, for parents.
@@ -139,20 +202,6 @@ exports.handler = async (event, context) => {
       </html>
     `;
 
-    // Admin notification email
-    const adminEmailHtml = `
-      <h2>New Trial Signup!</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
-      <p><strong>Child's Age:</strong> ${childAge}</p>
-      <p><strong>Primary Concern:</strong> ${primaryConcern}</p>
-      <p><strong>Signup Type:</strong> Free Trial</p>
-      <p><strong>Temp Password:</strong> ${tempPassword}</p>
-      <hr>
-      <p>Remember to follow up in 3 days to check on their progress!</p>
-    `;
-
     // Send emails using Brevo
     const emailData = JSON.stringify({
       sender: { name: 'Zivvy Team', email: 'hello@zivvy.app' },
@@ -161,14 +210,26 @@ exports.handler = async (event, context) => {
       htmlContent: userEmailHtml
     });
 
+    // Send admin notification
     const adminData = JSON.stringify({
       sender: { name: 'Zivvy System', email: 'hello@zivvy.app' },
       to: [{ email: 'hello@zivvy.app', name: 'Zivvy Team' }],
       subject: `New Trial Signup: ${name}`,
-      htmlContent: adminEmailHtml
+      htmlContent: `
+        <h2>New Trial Account Created!</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+        <p><strong>Child's Age:</strong> ${childAge}</p>
+        <p><strong>Primary Concern:</strong> ${primaryConcern}</p>
+        <p><strong>User ID:</strong> ${authData.user.id}</p>
+        <p><strong>Temp Password:</strong> ${tempPassword}</p>
+        <hr>
+        <p>Remember to follow up in 3 days!</p>
+      `
     });
 
-    // Send user email
+    // Send emails via Brevo
     const options = {
       hostname: 'api.brevo.com',
       port: 443,
@@ -181,7 +242,6 @@ exports.handler = async (event, context) => {
       }
     };
 
-    // Send both emails
     const sendEmail = (data) => {
       return new Promise((resolve, reject) => {
         const req = https.request(options, (res) => {
@@ -191,26 +251,32 @@ exports.handler = async (event, context) => {
             if (res.statusCode === 201 || res.statusCode === 200) {
               resolve(true);
             } else {
-              reject(new Error('Failed to send email'));
+              console.error('Email send failed:', responseData);
+              resolve(false); // Don't fail the whole process
             }
           });
         });
-
-        req.on('error', reject);
+        req.on('error', (err) => {
+          console.error('Email error:', err);
+          resolve(false); // Don't fail the whole process
+        });
         req.write(data);
         req.end();
       });
     };
 
     // Send both emails
-    await sendEmail(emailData);
-    await sendEmail(adminData);
+    await Promise.all([
+      sendEmail(emailData),
+      sendEmail(adminData)
+    ]);
 
     return {
       statusCode: 200,
       body: JSON.stringify({ 
         success: true, 
-        message: 'Account created successfully'
+        message: 'Account created successfully',
+        userId: authData.user.id
       })
     };
 
