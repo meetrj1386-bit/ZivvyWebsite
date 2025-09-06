@@ -115,98 +115,145 @@ exports.handler = async (event, context) => {
       });
 
     // Email HTML content
-    const userEmailHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Welcome to Zivvy</title>
-      </head>
-      <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #faf8f5;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #faf8f5; padding: 40px 20px;">
-          <tr>
-            <td align="center">
-              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(107, 91, 149, 0.1);">
-                <!-- Header -->
-                <tr>
-                  <td style="background: linear-gradient(135deg, #6b5b95 0%, #8073a3 100%); padding: 40px 30px; text-align: center;">
-                    <h1 style="margin: 0; color: #ffffff; font-size: 36px; font-weight: 700;">Welcome to Zivvy!</h1>
-                    <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.9); font-size: 16px;">
-                      Your 5-day free trial starts now
-                    </p>
-                  </td>
-                </tr>
+   
+// Update the subject line and email content in create-trial-account.js
+
+// Around line 186, update the subject:
+
+// Replace the userEmailHtml with this more emotionally connected version:
+const userEmailHtml = `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Welcome to Zivvy</title>
+  </head>
+  <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #faf8f5;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #faf8f5; padding: 40px 20px;">
+      <tr>
+        <td align="center">
+          <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(107, 91, 149, 0.1);">
+            <!-- Header -->
+            <tr>
+              <td style="background: linear-gradient(135deg, #6b5b95 0%, #8073a3 100%); padding: 40px 30px; text-align: center;">
+                <h1 style="margin: 0; color: #ffffff; font-size: 36px; font-weight: 700;">Welcome to Your Calmer Life!</h1>
+                <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.9); font-size: 16px;">
+                  Made with 💜 by parents, for parents
+                </p>
+              </td>
+            </tr>
+            
+            <!-- Body -->
+            <tr>
+              <td style="padding: 40px 30px;">
+                <h2 style="color: #2C2546; font-size: 24px; margin: 0 0 20px 0;">
+                  Hi ${name}, we see you 💜
+                </h2>
                 
-                <!-- Body -->
-                <tr>
-                  <td style="padding: 40px 30px;">
-                    <h2 style="color: #2C2546; font-size: 24px; margin: 0 0 20px 0;">
-                      Hi ${name}! 👋
-                    </h2>
-                    
-                    <p style="color: #4b5563; font-size: 16px; line-height: 1.8; margin: 0 0 30px 0;">
-                      Your account is ready! Here's everything you need to get started with Zivvy.
-                    </p>
-                    
-                    <!-- Login Credentials Box -->
-                    <div style="background: linear-gradient(135deg, rgba(107, 91, 149, 0.05), rgba(212, 165, 116, 0.05)); border-left: 4px solid #6b5b95; padding: 20px; margin: 30px 0; border-radius: 8px;">
-                      <h3 style="margin: 0 0 16px 0; color: #6b5b95; font-size: 18px;">Your Login Details:</h3>
-                      <p style="margin: 0 0 8px 0; color: #2C2546; font-size: 16px;">
-                        <strong>Email:</strong> ${email}
-                      </p>
-                      <p style="margin: 0; color: #2C2546; font-size: 16px;">
-                        <strong>Temporary Password:</strong> <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-family: monospace;">${tempPassword}</span>
-                      </p>
-                      <p style="margin: 16px 0 0 0; color: #87a08e; font-size: 14px; font-style: italic;">
-                        ✨ You'll be prompted to create your own password on first login
-                      </p>
-                    </div>
+                <!-- Emotional connection paragraph -->
+                <div style="background: linear-gradient(135deg, rgba(250, 248, 245, 1), rgba(245, 240, 235, 1)); border-radius: 12px; padding: 20px; margin: 0 0 30px 0;">
+                  <p style="color: #6b5b95; font-size: 16px; line-height: 1.8; margin: 0; font-style: italic;">
+                    "That feeling when the therapist gives you homework and you want to help your child SO badly... 
+                    but then life happens. The guilt. The worry. We know, because we've been there too."
+                  </p>
+                </div>
 
-                    <!-- Next Steps -->
-                    <h3 style="color: #2C2546; margin: 30px 0 16px 0;">Quick Start Guide:</h3>
-                    <ol style="color: #4b5563; font-size: 16px; line-height: 1.8; padding-left: 20px;">
-                      <li>Download the Zivvy app (links coming soon)</li>
-                      <li>Sign in with your email and temporary password</li>
-                      <li>Set up ${childAge} year old's profile</li>
-                      <li>Add your ${primaryConcern} therapy exercises</li>
-                      <li>Watch Zivvy create your perfect schedule!</li>
-                    </ol>
+                <p style="color: #4b5563; font-size: 16px; line-height: 1.8; margin: 0 0 20px 0;">
+                  <strong>Here's the thing:</strong> You're already an amazing parent. You showed up. You're seeking help. 
+                  Now let us handle the overwhelming part - the scheduling, the reminders, the tracking. 
+                </p>
 
-                    <!-- Support -->
-                    <p style="color: #87a08e; font-size: 14px; text-align: center; margin: 30px 0 0 0; padding-top: 30px; border-top: 1px solid #f0f0f0;">
-                      Questions? Reply to this email or contact us at hello@zivvy.app<br>
-                      We're here to help you succeed!
-                    </p>
-                  </td>
-                </tr>
+                <p style="color: #4b5563; font-size: 16px; line-height: 1.8; margin: 0 0 30px 0;">
+                  <strong>You focus on what matters:</strong> Those precious moments with your ${childAge} year old. 
+                  We'll make sure they happen, gently, consistently, without the stress.
+                </p>
                 
-                <!-- Footer -->
-                <tr>
-                  <td style="background: #2C2546; padding: 30px; text-align: center;">
-                    <p style="margin: 0 0 10px 0; color: #C9E4B4; font-size: 16px; font-weight: 600;">
-                      Your trial includes everything!
+                <!-- Login Credentials Box - More prominent -->
+                <div style="background: #6b5b95; padding: 24px; margin: 30px 0; border-radius: 12px;">
+                  <h3 style="margin: 0 0 16px 0; color: #ffffff; font-size: 20px; text-align: center;">
+                    🎯 Your Login Details (Save This!)
+                  </h3>
+                  <div style="background: white; border-radius: 8px; padding: 16px; margin: 16px 0;">
+                    <p style="margin: 0 0 8px 0; color: #2C2546; font-size: 16px;">
+                      <strong>Email:</strong> ${email}
                     </p>
-                    <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 14px;">
-                      No limits • No credit card • Just results
+                    <p style="margin: 0; color: #2C2546; font-size: 16px;">
+                      <strong>Password:</strong> <span style="background: #faf8f5; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-weight: bold;">${tempPassword}</span>
                     </p>
-                    <p style="margin: 20px 0 0 0; color: rgba(255,255,255,0.5); font-size: 12px;">
-                      © 2024 Zivvy. Made with 💜 by parents, for parents.
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-      </body>
-      </html>
-    `;
+                  </div>
+                  <p style="margin: 8px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px; text-align: center;">
+                    You'll create your own password when you first sign in
+                  </p>
+                </div>
 
+                <!-- App Download Section - Temporary but clear -->
+                <div style="background: linear-gradient(135deg, rgba(135, 160, 142, 0.1), rgba(212, 165, 116, 0.1)); border-radius: 12px; padding: 24px; margin: 30px 0; text-align: center; border: 2px dashed #87a08e;">
+                  <h3 style="color: #2C2546; margin: 0 0 12px 0;">📱 App Coming Very Soon!</h3>
+                  <p style="color: #4b5563; margin: 0 0 16px 0; font-size: 15px;">
+                    We're putting final touches on the mobile app. You'll be the FIRST to know when it's ready (this week!).
+                  </p>
+                  <p style="color: #87a08e; font-size: 14px; margin: 0; font-weight: 600;">
+                    For now, save this email - your login details are here!
+                  </p>
+                </div>
+
+                <!-- What happens next -->
+                <h3 style="color: #2C2546; margin: 30px 0 16px 0;">What happens in the next 24 hours:</h3>
+                <div style="background: #faf8f5; border-radius: 8px; padding: 20px;">
+                  <p style="color: #4b5563; font-size: 15px; line-height: 1.8; margin: 0;">
+                    ✓ You'll get our "Quick Start Guide" email<br>
+                    ✓ App download link arrives (as soon as it's live)<br>
+                    ✓ You sign in and spend 10 minutes setting up<br>
+                    ✓ Tomorrow, you wake up with a plan that actually works<br>
+                    ✓ No more therapy homework guilt. Ever.
+                  </p>
+                </div>
+
+                <!-- Personal note -->
+                <div style="margin: 40px 0; padding: 20px; background: white; border-left: 4px solid #d4a574;">
+                  <p style="color: #2C2546; font-size: 15px; line-height: 1.6; margin: 0;">
+                    <strong>A note from our founder (also a special needs mom):</strong><br><br>
+                    "I built Zivvy after crying in my car outside therapy, overwhelmed by all the exercises 
+                    we were supposed to do at home. You're not failing. The system is just not built for real life. 
+                    That's what we're fixing. Together. You've got this, and now you've got us too."
+                  </p>
+                </div>
+
+                <!-- Support -->
+                <p style="color: #87a08e; font-size: 14px; text-align: center; margin: 30px 0 0 0; padding-top: 30px; border-top: 1px solid #f0f0f0;">
+                  <strong>Need help? Just reply to this email.</strong><br>
+                  We're real parents who actually read and respond.<br>
+                  hello@zivvy.app
+                </p>
+              </td>
+            </tr>
+            
+            <!-- Footer -->
+            <tr>
+              <td style="background: #2C2546; padding: 30px; text-align: center;">
+                <p style="margin: 0 0 10px 0; color: #C9E4B4; font-size: 16px; font-weight: 600;">
+                  Your village starts here
+                </p>
+                <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 14px;">
+                  5 days free • No credit card • Just support
+                </p>
+                <p style="margin: 20px 0 0 0; color: rgba(255,255,255,0.5); font-size: 12px;">
+                  © 2024 Zivvy. Made with 💜 by parents who get it.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+`;
     // Send emails using Brevo
     const emailData = JSON.stringify({
       sender: { name: 'Zivvy Team', email: 'hello@zivvy.app' },
       to: [{ email, name }],
-      subject: '🎉 Welcome to Zivvy - Your Login Details Inside',
+subject: '🌟 Your calm starts now - Login details inside (open this!)',
       htmlContent: userEmailHtml
     });
 

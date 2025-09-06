@@ -1462,6 +1462,11 @@ document.querySelectorAll('.therapist-inquiry-btn').forEach(btn => {
   });
 });
 
+document.querySelector('header .btn-primary').addEventListener('click', function(e) {
+  e.preventDefault();
+  openLead();
+});
+
 // Handle lead form submission
 document.getElementById('leadForm').addEventListener('submit', async function(e) {
   e.preventDefault();
