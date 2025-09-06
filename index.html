@@ -1068,38 +1068,90 @@
   </section>
 
   <!-- Pricing -->
-  <section class="pricing" id="pricing">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Simple, affordable pricing</h2>
-        <p class="section-subtitle">Less than a cup of coffee, for peace of mind every day</p>
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Choose Your Plan</h2>
+      <p class="section-subtitle">Solutions for families and therapy professionals</p>
+    </div>
+
+    <div class="pricing-cards" style="grid-template-columns: repeat(2, 1fr); max-width: 900px;">
+      <!-- Family Plan -->
+      <div class="pricing-card featured">
+        <div class="pricing-badge">MOST POPULAR</div>
+        <h3>Family Plan</h3>
+        <div class="price">
+          $5
+          <span class="price-period">/month</span>
+        </div>
+        <p>Everything you need to stay consistent</p>
+        <ul class="pricing-features">
+          <li>Unlimited exercises & schedules</li>
+          <li>Smart reminders</li>
+          <li>Progress tracking</li>
+          <li>Family sharing</li>
+          <li>Therapist reports</li>
+          <li>24/7 support</li>
+        </ul>
+        <a href="#" class="btn btn-primary start-trial-btn" style="width: 100%;">Start 5-Day Free Trial</a>
+        <p style="margin-top: 12px; color: var(--text-mid); font-size: 0.875rem;">
+          No credit card required
+        </p>
       </div>
 
-      <div class="pricing-cards">
-        <div class="pricing-card featured">
-          <div class="pricing-badge">MOST POPULAR</div>
-          <h3>Family Plan</h3>
-          <div class="price">
-            $5
-            <span class="price-period">/month</span>
-          </div>
-          <p>Everything you need to stay consistent</p>
-          <ul class="pricing-features">
-            <li>Unlimited exercises & schedules</li>
-            <li>Smart reminders</li>
-            <li>Progress tracking</li>
-            <li>Family sharing</li>
-            <li>Therapist reports</li>
-            <li>24/7 support</li>
-          </ul>
-          <a href="#" class="btn btn-primary" style="width: 100%;">Start 5-Day Free Trial</a>
-          <p style="margin-top: 12px; color: var(--text-mid); font-size: 0.875rem;">
-            No credit card required
-          </p>
+      <!-- Therapist/Clinic Plan -->
+      <div class="pricing-card">
+        <div class="pricing-badge" style="background: var(--sage);">FOR PROFESSIONALS</div>
+        <h3>Therapist & Clinic Plan</h3>
+        <div style="padding: 20px 0;">
+          <p style="font-size: 1.125rem; color: var(--purple); font-weight: 600;">Custom Solutions</p>
+        </div>
+        <p>Empower your practice and families</p>
+        <ul class="pricing-features">
+          <li>Manage multiple families</li>
+          <li>Custom exercise libraries</li>
+          <li>Compliance tracking dashboard</li>
+          <li>Automated progress reports</li>
+          <li>Direct parent messaging</li>
+          <li>Co-branded experience</li>
+          <li>Professional training included</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#" class="btn btn-secondary therapist-inquiry-btn" style="width: 100%; border-color: var(--sage); color: var(--sage);">
+          Contact Us for Details
+        </a>
+        <p style="margin-top: 12px; color: var(--text-mid); font-size: 0.875rem;">
+          Personalized onboarding included
+        </p>
+      </div>
+    </div>
+
+    <!-- Benefits for Therapists Section -->
+    <div style="margin-top: 80px; padding: 40px; background: linear-gradient(135deg, rgba(135, 160, 142, 0.05), rgba(212, 165, 116, 0.05)); border-radius: 24px;">
+      <h3 style="text-align: center; color: var(--text-dark); margin-bottom: 32px; font-size: 1.75rem;">
+        Why Therapists Love Zivvy
+      </h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+        <div style="text-align: center;">
+          <div style="font-size: 2.5rem; margin-bottom: 12px;">📈</div>
+          <h4 style="color: var(--purple); margin-bottom: 8px;">3x Better Outcomes</h4>
+          <p style="color: var(--text-mid); font-size: 0.9rem;">Families who use Zivvy show significantly improved compliance</p>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 2.5rem; margin-bottom: 12px;">⏰</div>
+          <h4 style="color: var(--purple); margin-bottom: 8px;">Save 5+ Hours/Week</h4>
+          <p style="color: var(--text-mid); font-size: 0.9rem;">Automated reminders and tracking reduce follow-up time</p>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 2.5rem; margin-bottom: 12px;">💝</div>
+          <h4 style="color: var(--purple); margin-bottom: 8px;">Happier Families</h4>
+          <p style="color: var(--text-mid); font-size: 0.9rem;">Parents feel supported between sessions</p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ENHANCED CTA -->
   <section class="cta">
@@ -1266,6 +1318,204 @@
       }
   });
   </script>
+
+
+<!-- Lead Capture Modal -->
+<div id="leadModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(44, 37, 70, 0.9); z-index: 1000; overflow-y: auto;">
+  <div style="max-width: 500px; margin: 50px auto; background: var(--cream); border-radius: 24px; padding: 40px; position: relative;">
+    <!-- Close button -->
+    <button onclick="closeLead()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: var(--text-mid); cursor: pointer;">×</button>
+    
+    <!-- Logo/Animation -->
+    <div style="text-align: center; margin-bottom: 24px;">
+      <lottie-player 
+        src="./assets/animations/family-love.json" 
+        background="transparent"
+        speed="1"
+        style="width: 80px; height: 80px; margin: 0 auto;"
+        loop
+        autoplay>
+      </lottie-player>
+    </div>
+
+    <h2 style="text-align: center; color: var(--purple); margin-bottom: 8px; font-size: 1.75rem;">Start Your Free Trial</h2>
+    <p style="text-align: center; color: var(--text-mid); margin-bottom: 32px;">
+      Get instant access to Zivvy for 5 days, completely free
+    </p>
+
+    <form id="leadForm">
+      <div style="margin-bottom: 16px;">
+        <input 
+          type="text" 
+          name="name" 
+          placeholder="Your Name *" 
+          required 
+          style="width: 100%; padding: 14px 16px; border: 1px solid var(--purple); border-radius: 12px; font-size: 16px; background: white; color: var(--text-dark);"
+        />
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <input 
+          type="email" 
+          name="email" 
+          placeholder="Email Address *" 
+          required 
+          style="width: 100%; padding: 14px 16px; border: 1px solid var(--purple); border-radius: 12px; font-size: 16px; background: white; color: var(--text-dark);"
+        />
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <input 
+          type="tel" 
+          name="phone" 
+          placeholder="Phone Number (optional)" 
+          style="width: 100%; padding: 14px 16px; border: 1px solid var(--purple); border-radius: 12px; font-size: 16px; background: white; color: var(--text-dark);"
+        />
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <select 
+          name="childAge" 
+          required 
+          style="width: 100%; padding: 14px 16px; border: 1px solid var(--purple); border-radius: 12px; font-size: 16px; background: white; color: var(--text-dark);"
+        >
+          <option value="">Child's Age *</option>
+          <option value="0-2">0-2 years</option>
+          <option value="3-5">3-5 years</option>
+          <option value="6-8">6-8 years</option>
+          <option value="9-12">9-12 years</option>
+          <option value="13+">13+ years</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <select 
+          name="primaryConcern" 
+          required 
+          style="width: 100%; padding: 14px 16px; border: 1px solid var(--purple); border-radius: 12px; font-size: 16px; background: white; color: var(--text-dark);"
+        >
+          <option value="">Primary Area of Focus *</option>
+          <option value="speech">Speech & Language</option>
+          <option value="ot">Occupational Therapy</option>
+          <option value="pt">Physical Therapy</option>
+          <option value="behavioral">Behavioral</option>
+          <option value="multiple">Multiple Areas</option>
+        </select>
+      </div>
+
+      <button 
+        type="submit" 
+        style="width: 100%; padding: 16px; background: linear-gradient(135deg, var(--purple), #5a4a7d); color: white; border: none; border-radius: 100px; font-size: 18px; font-weight: 700; cursor: pointer;"
+      >
+        Get Started - It's Free!
+      </button>
+    </form>
+
+    <p style="text-align: center; margin-top: 16px; color: var(--text-mid); font-size: 0.875rem;">
+      We'll send your login details to your email
+    </p>
+  </div>
+</div>
+<script>
+// Modal functions
+function openLead() {
+  document.getElementById('leadModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLead() {
+  document.getElementById('leadModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+// Close modal if clicking outside
+document.getElementById('leadModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeLead();
+  }
+});
+
+// Attach to all Start Trial buttons
+document.querySelectorAll('.start-trial-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    openLead();
+  });
+});
+
+// Handle therapist inquiry
+document.querySelectorAll('.therapist-inquiry-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    // Scroll to contact form and pre-fill message
+    const contactForm = document.getElementById('contact-footer-form');
+    if (contactForm) {
+      contactForm.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        const messageField = contactForm.querySelector('textarea[name="message"]');
+        if (messageField) {
+          messageField.value = 'I am interested in learning more about Zivvy for my therapy practice.';
+          messageField.focus();
+        }
+      }, 500);
+    }
+  });
+});
+
+// Handle lead form submission
+document.getElementById('leadForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const formData = new FormData(this);
+  const data = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    phone: formData.get('phone'),
+    childAge: formData.get('childAge'),
+    primaryConcern: formData.get('primaryConcern'),
+    type: 'trial_signup'
+  };
+  
+  const submitBtn = this.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = 'Creating your account...';
+  submitBtn.disabled = true;
+  
+  try {
+    const response = await fetch('/.netlify/functions/create-trial-account', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      // Show success message
+      this.innerHTML = `
+        <div style="text-align: center; padding: 40px 0;">
+          <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+          <h3 style="color: var(--purple); margin-bottom: 16px;">Welcome to Zivvy!</h3>
+          <p style="color: var(--text-mid); margin-bottom: 24px;">
+            Check your email for your login details and app download links.
+          </p>
+          <button onclick="closeLead()" style="padding: 12px 32px; background: var(--purple); color: white; border: none; border-radius: 100px; font-size: 16px; font-weight: 600; cursor: pointer;">
+            Got it!
+          </button>
+        </div>
+      `;
+    } else {
+      throw new Error('Failed to create account');
+    }
+  } catch (error) {
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+    alert('Sorry, there was an error creating your account. Please try again or contact us at hello@zivvy.app');
+  }
+});
+</script>
 
 </body>
 </html>
