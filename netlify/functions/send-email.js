@@ -1,8 +1,6 @@
 const https = require('https');
 
 exports.handler = async (event, context) => {
-  console.log('Function called with method:', event.httpMethod);
-  
   if (event.httpMethod !== 'POST') {
     return { 
       statusCode: 405, 
@@ -13,8 +11,6 @@ exports.handler = async (event, context) => {
   try {
     const data = JSON.parse(event.body);
     const { name, email, phone, message } = data;
-    
-    console.log('Received data:', { name, email, hasMessage: !!message });
 
     if (!name || !email || !message) {
       return {
@@ -23,30 +19,92 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Check if API key exists
-    if (!process.env.BREVO_API_KEY) {
-      console.error('BREVO_API_KEY is not set');
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: 'Server configuration error - API key missing' })
-      };
-    }
-
-    console.log('API Key exists, length:', process.env.BREVO_API_KEY.length);
-
     const emailData = JSON.stringify({
       sender: { name: 'Zivvy Support', email: 'hello@zivvy.app' },
       to: [{ email, name }],
-      subject: 'Thank you for contacting Zivvy!',
+      subject: 'Welcome to Zivvy - We\'ve Received Your Message! 💜',
       htmlContent: `
-        <h2>Thank you for contacting Zivvy!</h2>
-        <p>Dear ${name},</p>
-        <p>We've received your message and will get back to you within 24 hours.</p>
-        <div style="background: #f5f5f5; padding: 20px; margin: 20px 0;">
-          <strong>Your message:</strong><br>${message}
-        </div>
-        <p>Best regards,<br>The Zivvy Team</p>
-      `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>Zivvy</title>
+        </head>
+        <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #faf8f5;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #faf8f5; padding: 40px 20px;">
+            <tr>
+              <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(107, 91, 149, 0.1);">
+                  <!-- Header -->
+                  <tr>
+                    <td style="background: linear-gradient(135deg, #6b5b95 0%, #8073a3 100%); padding: 40px 30px; text-align: center;">
+                      <h1 style="margin: 0; color: #ffffff; font-size: 36px; font-weight: 700;">Zivvy</h1>
+                      <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.9); font-size: 16px;">
+                        Made with 💜 by parents, for parents
+                      </p>
+                    </td>
+                  </tr>
+                  
+                  <!-- Body -->
+                  <tr>
+                    <td style="padding: 40px 30px;">
+                      <h2 style="color: #2C2546; font-size: 28px; margin: 0 0 20px 0;">
+                        Thank You for Reaching Out, ${name}! 
+                      </h2>
+                      
+                      <p style="color: #4b5563; font-size: 16px; line-height: 1.8; margin: 0 0 20px 0;">
+                        We're so glad you took the first step toward making therapy homework more manageable for your family.
+                      </p>
+                      
+                      <div style="background: linear-gradient(135deg, rgba(107, 91, 149, 0.05), rgba(212, 165, 116, 0.05)); border-left: 4px solid #6b5b95; padding: 20px; margin: 30px 0; border-radius: 8px;">
+                        <p style="margin: 0 0 10px 0; color: #6b5b95; font-weight: bold; font-size: 14px;">YOUR MESSAGE:</p>
+                        <p style="margin: 0; color: #2C2546; font-size: 16px; line-height: 1.6;">
+                          "${message.replace(/\n/g, '<br>')}"
+                        </p>
+                      </div>
+                      
+                      <p style="color: #4b5563; font-size: 16px; line-height: 1.8; margin: 20px 0;">
+                        <strong style="color: #2C2546;">What happens next?</strong><br>
+                        Our team will personally review your message and respond within 24 hours. 
+                        We read every message and truly care about helping your family succeed.
+                      </p>
+                      
+                      <div style="text-align: center; margin: 40px 0;">
+                        <a href="https://zivvy.app" style="display: inline-block; padding: 16px 36px; background: linear-gradient(135deg, #6b5b95, #5a4a7d); color: #ffffff; text-decoration: none; border-radius: 100px; font-weight: bold; font-size: 16px;">
+                          Explore Zivvy While You Wait
+                        </a>
+                      </div>
+                      
+                      <p style="color: #87a08e; font-size: 14px; text-align: center; margin: 30px 0 0 0; padding-top: 30px; border-top: 1px solid #f0f0f0;">
+                        No rush, no pressure. When you're ready, we're here to help.<br>
+                        Your journey to consistent therapy practice starts with one small step.
+                      </p>
+                    </td>
+                  </tr>
+                  
+                  <!-- Footer -->
+                  <tr>
+                    <td style="background: #2C2546; padding: 30px; text-align: center;">
+                      <p style="margin: 0 0 10px 0; color: #C9E4B4; font-size: 16px; font-weight: 600;">
+                        Join Our Community
+                      </p>
+                      <p style="margin: 0 0 20px 0; color: rgba(255,255,255,0.7); font-size: 14px;">
+                        Follow us for daily tips and encouragement
+                      </p>
+                      <p style="margin: 20px 0 0 0; color: rgba(255,255,255,0.5); font-size: 12px;">
+                        © 2024 Zivvy. All rights reserved.<br>
+                        Made with 💜 by parents, for parents.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `,
+      textContent: `Thank you for contacting Zivvy!\n\nDear ${name},\n\nWe've received your message and will get back to you within 24 hours.\n\nYour message:\n${message}\n\nBest regards,\nThe Zivvy Team`
     });
 
     const options = {
@@ -57,7 +115,8 @@ exports.handler = async (event, context) => {
       headers: {
         'Content-Type': 'application/json',
         'api-key': process.env.BREVO_API_KEY,
-        'accept': 'application/json'
+        'accept': 'application/json',
+        'Content-Length': Buffer.byteLength(emailData)
       }
     };
 
@@ -66,28 +125,21 @@ exports.handler = async (event, context) => {
         let data = '';
         res.on('data', (chunk) => { data += chunk; });
         res.on('end', () => {
-          console.log('Brevo response status:', res.statusCode);
-          console.log('Brevo response:', data);
-          
           if (res.statusCode === 201 || res.statusCode === 200) {
             resolve({
               statusCode: 200,
-              body: JSON.stringify({ success: true, message: 'Email sent' })
+              body: JSON.stringify({ success: true, message: 'Email sent successfully' })
             });
           } else {
             resolve({
               statusCode: 500,
-              body: JSON.stringify({ 
-                error: 'Failed to send email',
-                details: data 
-              })
+              body: JSON.stringify({ error: 'Failed to send email' })
             });
           }
         });
       });
 
       req.on('error', (error) => {
-        console.error('Request error:', error);
         resolve({
           statusCode: 500,
           body: JSON.stringify({ error: 'Failed to send email' })
@@ -99,10 +151,9 @@ exports.handler = async (event, context) => {
     });
 
   } catch (error) {
-    console.error('Caught error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Server error', details: error.message })
+      body: JSON.stringify({ error: 'Server error' })
     };
   }
 };
