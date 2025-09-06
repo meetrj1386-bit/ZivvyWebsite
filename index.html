@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zivvy – Daily therapy made simple for special needs families</title>
+  <meta name="description" content="Transform your child's therapy homework into a calm daily rhythm. Smart scheduling, gentle reminders, progress tracking. Start free." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    :root {
+      --purple: #6b5b95;
+      --purple-dark: #5a4a7d;
+      --sage: #87a08e;
+      --tan: #d4a574;
+      --cream: #faf8f5;
+      --white: #ffffff;
+      --text-dark: #2C2546;
+      --text-mid: rgba(62, 56, 88, 0.7);
+      --text-light: rgba(62, 56, 88, 0.5);
+      --shadow-sm: 0 2px 8px rgba(107, 91, 149, 0.08);
+      --shadow-md: 0 10px 30px rgba(107, 91, 149, 0.12);
+      --shadow-lg: 0 20px 60px rgba(107, 91, 149, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Quicksand', system-ui, -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.6;
+      font-weight: 500;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Floating Shapes Background */
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.03;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .shape:nth-child(1) {
+      width: 400px;
+      height: 400px;
+      background: var(--purple);
+      top: -10%;
+      left: -10%;
+      animation-duration: 25s;
+    }
+
+    .shape:nth-child(2) {
+      width: 300px;
+      height: 300px;
+      background: var(--sage);
+      top: 50%;
+      right: -5%;
+      animation-duration: 30s;
+      animation-delay: -5s;
+    }
+
+    .shape:nth-child(3) {
+      width: 500px;
+      height: 500px;
+      background: var(--tan);
+      bottom: -20%;
+      left: 30%;
+      animation-duration: 35s;
+      animation-delay: -10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -30px) scale(1.05); }
+      50% { transform: translate(-20px, 20px) scale(0.95); }
+      75% { transform: translate(20px, 30px) scale(1.02); }
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 245, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(107, 91, 149, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+    }
+
+    .brand {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--purple), var(--tan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .menu {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .menu a {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .menu a:hover {
+      color: var(--purple);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color: white;
+      box-shadow: 0 10px 30px rgba(107, 91, 149, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(107, 91, 149, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--purple);
+      border: 2px solid var(--purple);
+    }
+
+    .btn-secondary:hover {
+      background: var(--purple);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* HERO SECTION WITH VIDEO */
+    .hero {
+      padding: 100px 0 80px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      margin-bottom: 24px;
+      color: var(--text-dark);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--purple), var(--tan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-mid);
+      margin-bottom: 32px;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .trust-badges {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-mid);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* VIDEO WRAPPER */
+    .video-wrapper {
+      position: relative;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 
+        0 50px 100px rgba(107, 91, 149, 0.25),
+        0 20px 40px rgba(107, 91, 149, 0.15);
+    }
+
+    .demo-video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: block;
+      background: #000;
+    }
+
+    .play-button-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .video-duration {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* HOW IT WORKS SECTION */
+    .how-it-works {
+      padding: 80px 0;
+      background: linear-gradient(180deg, rgba(107, 91, 149, 0.03), transparent);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      margin-bottom: 16px;
+      color: var(--text-dark);
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: var(--text-mid);
+    }
+
+    .steps-with-mockups {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-top: 64px;
+    }
+
+    .step-with-mockup {
+      text-align: center;
+      position: relative;
+    }
+
+    .mockup-content-wrapper {
+      position: relative;
+      margin: 0 auto 32px;
+    }
+
+    .step-number {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      background: var(--purple);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .step-title {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    .step-description {
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* Features */
+    .features {
+      padding: 80px 0;
+      background: white;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(107, 91, 149, 0.08);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(107, 91, 149, 0.1), rgba(107, 91, 149, 0.05));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+    }
+
+    .feature-description {
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 80px 0;
+      background: white;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .testimonial {
+      background: linear-gradient(135deg, rgba(250, 248, 245, 0.8), white);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(107, 91, 149, 0.08);
+    }
+
+    .stars {
+      color: #f59e0b;
+      margin-bottom: 16px;
+      font-size: 1.2rem;
+    }
+
+    .testimonial-text {
+      color: var(--text-dark);
+      font-style: italic;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .testimonial-author {
+      font-weight: 700;
+      color: var(--purple);
+    }
+
+    /* Pricing */
+    .pricing {
+      padding: 80px 0;
+      background: linear-gradient(180deg, transparent, rgba(135, 160, 142, 0.05));
+    }
+
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+      position: relative;
+      border: 1px solid rgba(107, 91, 149, 0.08);
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--purple);
+      transform: scale(1.05);
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--purple);
+      color: white;
+      padding: 4px 20px;
+      border-radius: 100px;
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+
+    .price {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 20px 0;
+    }
+
+    .price-period {
+      font-size: 1rem;
+      color: var(--text-mid);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin: 32px 0;
+    }
+
+    .pricing-features li {
+      padding: 12px 0;
+      color: var(--text-dark);
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .pricing-features li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: var(--sage);
+      font-weight: 700;
+    }
+
+    /* CTA */
+    .cta {
+      padding: 100px 0;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(107, 91, 149, 0.05), rgba(212, 165, 116, 0.05));
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      margin-bottom: 16px;
+    }
+
+    .cta p {
+      font-size: 1.25rem;
+      color: var(--text-mid);
+      margin-bottom: 32px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 48px 0;
+      background: white;
+      border-top: 1px solid rgba(107, 91, 149, 0.1);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-links a {
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--purple);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .menu { display: none; }
+      .hero-grid { 
+        grid-template-columns: 1fr;
+        gap: 48px;
+        text-align: center;
+      }
+      .hero-buttons { 
+        flex-direction: column;
+        align-items: center;
+      }
+      .trust-badges { justify-content: center; }
+      .steps-with-mockups { grid-template-columns: 1fr; }
+      .footer-content {
+        flex-direction: column;
+        gap: 24px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Background Shapes -->
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <nav class="nav">
+        <a href="#" class="brand" style="display: flex; align-items: center; gap: 10px;">
+          <lottie-player 
+            src="./assets/animations/family-love.json" 
+            background="transparent"
+            speed="1"
+            style="width: 45px; height: 45px;"
+            loop
+            autoplay>
+          </lottie-player>
+          <span>Zivvy</span>
+        </a>
+        <div class="menu">
+          <a href="#features">Features</a>
+          <a href="#how">How it Works</a>
+          <a href="#demo">See Demo</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+        <a href="#" class="btn btn-primary">Start Free Trial</a>
+      </nav>
+    </div>
+  </header>
+
+
+  <!-- Add this right after the closing </header> tag -->
+<div style="background: linear-gradient(90deg, var(--purple), var(--tan)); padding: 12px 0; text-align: center;">
+  <p style="color: white; margin: 0; font-size: 14px; font-weight: 600; letter-spacing: 0.5px;">
+    Made with 💜 by parents, for parents — We understand the journey because we're on it too
+  </p>
+</div>
+
+  <!-- HERO WITH VIDEO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <h1>
+            Turn therapy homework into
+            <span class="gradient-text"> daily wins</span>
+          </h1>
+          <p class="hero-subtitle">
+            Zivvy helps families stay consistent with therapy exercises. 
+            Smart scheduling that works around your real life, gentle reminders that respect your time, 
+            and progress tracking that celebrates small wins.
+          </p>
+
+          <!-- Emotional Connection Box -->
+          <div style="background: linear-gradient(135deg, rgba(107, 91, 149, 0.05), rgba(212, 165, 116, 0.05)); border-radius: 16px; padding: 20px; margin: 24px 0; border-left: 4px solid var(--purple);">
+            <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-dark); font-weight: 600;">
+              "The therapist gives you exercises. You want to help. But between work, siblings, and meltdowns... 
+              <span style="color: var(--purple);">another week passes with that guilt feeling.</span>"
+            </p>
+            <p style="font-size: 0.9rem; color: var(--text-mid); margin-top: 12px;">
+              Sound familiar? You're not alone. 78% of parents struggle with therapy homework consistency.
+            </p>
+          </div>
+
+          <div class="hero-buttons">
+            <a href="#" class="btn btn-primary">
+              Start 5-Day Free Trial
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14m-7-7l7 7-7 7"/>
+              </svg>
+            </a>
+            <a href="#demo" class="btn btn-secondary">See Demo</a>
+          </div>
+          <div class="trust-badges">
+            <div class="badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--sage)">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span>4.9/5 Parent Rating</span>
+            </div>
+            <div class="badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--tan)">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              <span>Therapist Approved</span>
+            </div>
+            <div class="badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--purple)">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+              </svg>
+              <span>Secure & Private</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIDEO AREA -->
+        <div class="video-wrapper">
+          <div class="video-container">
+            <video 
+              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='450' viewBox='0 0 800 450'%3E%3Crect fill='%236b5b95' width='800' height='450'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='white' font-family='sans-serif' font-size='24'%3EDemo Video Coming Soon%3C/text%3E%3C/svg%3E" 
+              controls 
+              playsinline
+              class="demo-video"
+            >
+              Your browser doesn't support video.
+            </video>
+            
+            <div class="play-button-overlay">
+              <div class="play-button">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                  <circle cx="30" cy="30" r="30" fill="white" opacity="0.9"/>
+                  <path d="M24 20L40 30L24 40V20Z" fill="var(--purple)"/>
+                </svg>
+              </div>
+              <div class="video-duration">2:30</div>
+            </div>
+          </div>
+          
+          <div class="video-caption" style="margin-top: 16px; text-align: center;">
+            <p style="color: var(--text-mid); font-size: 14px; font-style: italic;">
+              See how Sarah uses Zivvy to manage 7 daily therapy exercises with her 5-year-old
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRIDGING THE THERAPY GAP SECTION -->
+  <section style="padding: 80px 0; background: linear-gradient(180deg, white, rgba(135, 160, 142, 0.03));">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Bridging the therapy gap</h2>
+        <p class="section-subtitle">Your therapist has 1 hour. You have the other 167.</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px;">
+        <div style="text-align: center;">
+          <div style="font-size: 3rem; color: var(--purple); font-weight: 700;">1%</div>
+          <p style="color: var(--text-mid); margin-top: 8px;">Time with therapist</p>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 3rem; color: var(--sage); font-weight: 700;">99%</div>
+          <p style="color: var(--text-mid); margin-top: 8px;">Time at home</p>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 3rem; color: var(--tan); font-weight: 700;">3x</div>
+          <p style="color: var(--text-mid); margin-top: 8px;">Better outcomes with daily practice</p>
+        </div>
+      </div>
+      
+      <div style="max-width: 700px; margin: 48px auto 0; text-align: center;">
+        <p style="font-size: 1.125rem; color: var(--text-dark); line-height: 1.8;">
+          Research shows: <strong>Children who practice therapy exercises at home progress 
+          3x faster</strong> than therapy sessions alone. But only 20% of families manage 
+          to stay consistent without support.
+        </p>
+        <p style="font-size: 1rem; color: var(--purple); margin-top: 16px; font-weight: 600;">
+          That's where Zivvy changes everything.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS WITH PROPER MOCKUPS -->
+  <section class="how-it-works" id="how">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Start in 3 simple steps</h2>
+        <p class="section-subtitle">Get your first schedule in under 10 minutes</p>
+      </div>
+
+      <div class="steps-with-mockups">
+        <!-- Step 1: Setup Form -->
+        <div class="step-with-mockup">
+          <div class="mockup-content-wrapper">
+            <div class="step-number">1</div>
+            <div style="height: 360px; width: 280px; background: #faf8f5; border-radius: 24px; box-shadow: 0 20px 40px rgba(107, 91, 149, 0.15); overflow: hidden; margin: 0 auto;">
+              <div style="padding: 24px;">
+                <div style="font-size: 18px; font-weight: 700; color: #2C2546; margin-bottom: 16px;">About Your Child</div>
+                <div style="background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px; border: 1.5px solid rgba(107, 91, 149, 0.2);">
+                  <div style="font-size: 11px; color: #6b5b95; margin-bottom: 4px;">Name</div>
+                  <div style="font-size: 15px; color: #2C2546; font-weight: 600;">Emma</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 14px; margin-bottom: 16px; border: 1.5px solid rgba(107, 91, 149, 0.2);">
+                  <div style="font-size: 11px; color: #6b5b95; margin-bottom: 4px;">Age</div>
+                  <div style="font-size: 15px; color: #2C2546; font-weight: 600;">5 years</div>
+                </div>
+                <div style="font-size: 12px; color: #6b5b95; margin-bottom: 12px; font-weight: 600;">Areas of Focus:</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <div style="background: rgba(107, 91, 149, 0.1); border-radius: 12px; padding: 12px; text-align: center; border: 1.5px solid #6b5b95;">
+                    <div style="font-size: 20px; margin-bottom: 4px;">🗣️</div>
+                    <div style="font-size: 12px; font-weight: 600; color: #2C2546;">Speech</div>
+                  </div>
+                  <div style="background: rgba(107, 91, 149, 0.1); border-radius: 12px; padding: 12px; text-align: center; border: 1.5px solid #6b5b95;">
+                    <div style="font-size: 20px; margin-bottom: 4px;">🤸</div>
+                    <div style="font-size: 12px; font-weight: 600; color: #2C2546;">Motor</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 class="step-title">Tell us about your family</h3>
+          <p class="step-description">
+            Share your child's age, current therapies, and daily routine. 
+            We'll build around what already works.
+          </p>
+        </div>
+
+        <!-- Step 2: Schedule -->
+        <div class="step-with-mockup">
+          <div class="mockup-content-wrapper">
+            <div class="step-number">2</div>
+            <div style="height: 360px; width: 280px; background: #faf8f5; border-radius: 24px; box-shadow: 0 20px 40px rgba(107, 91, 149, 0.15); overflow: hidden; margin: 0 auto;">
+              <div style="background: linear-gradient(135deg, #6b5b95, #8073a3); color: white; padding: 20px;">
+                <div style="font-size: 18px; font-weight: 700;">Your Schedule</div>
+                <div style="font-size: 12px; opacity: 0.9; margin-top: 4px;">7 exercises perfectly timed</div>
+              </div>
+              <div style="padding: 20px; font-size: 13px;">
+                <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                  <span style="color: #6b5b95; font-weight: 600; width: 50px; font-size: 12px;">7:30</span>
+                  <div style="flex: 1; background: white; padding: 10px; border-radius: 10px; border-left: 3px solid #87a08e; box-shadow: 0 2px 6px rgba(107, 91, 149, 0.1);">
+                    <div style="font-weight: 600; color: #2C2546;">Morning stretch</div>
+                    <div style="font-size: 11px; color: rgba(62, 56, 88, 0.7);">10 min • Physical</div>
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                  <span style="color: #6b5b95; font-weight: 600; width: 50px; font-size: 12px;">9:30</span>
+                  <div style="flex: 1; background: white; padding: 10px; border-radius: 10px; border-left: 3px solid #87a08e; box-shadow: 0 2px 6px rgba(107, 91, 149, 0.1);">
+                    <div style="font-weight: 600; color: #2C2546;">Speech practice</div>
+                    <div style="font-size: 11px; color: rgba(62, 56, 88, 0.7);">15 min • Oral motor</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 class="step-title">Review your smart schedule</h3>
+          <p class="step-description">
+            See exercises perfectly timed around meals, school, and energy. 
+            Adjust anything that doesn't fit.
+          </p>
+        </div>
+
+        <!-- Step 3: Progress -->
+        <div class="step-with-mockup">
+          <div class="mockup-content-wrapper">
+            <div class="step-number">3</div>
+            <div style="height: 360px; width: 280px; background: #faf8f5; border-radius: 24px; box-shadow: 0 20px 40px rgba(107, 91, 149, 0.15); overflow: hidden; margin: 0 auto;">
+              <div style="background: linear-gradient(135deg, #87a08e, #95b09c); color: white; padding: 24px; text-align: center;">
+                <div style="font-size: 14px; opacity: 0.95;">Current Streak</div>
+                <div style="font-size: 42px; font-weight: 700; margin: 8px 0;">12</div>
+                <div style="font-size: 13px; opacity: 0.95;">days of consistency!</div>
+              </div>
+              <div style="padding: 20px;">
+                <div style="font-size: 15px; font-weight: 600; color: #2C2546; margin-bottom: 16px;">Progress by Category</div>
+                <div style="background: white; border-radius: 12px; padding: 12px; box-shadow: 0 2px 8px rgba(107, 91, 149, 0.1);">
+                  <div style="font-size: 13px; font-weight: 600; color: #2C2546; margin-bottom: 8px;">Recent Win 🌟</div>
+                  <div style="font-size: 12px; color: #2C2546;">Emma said "more please" clearly!</div>
+                  <div style="font-size: 10px; color: rgba(62, 56, 88, 0.6); margin-top: 4px;">Speech • 2 days ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 class="step-title">Follow gentle guidance</h3>
+          <p class="step-description">
+            Get reminded at the right times. Track progress with quick taps. 
+            Celebrate consistency building.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTIFICATION PREVIEW SECTION -->
+  <section style="padding: 80px 0; background: linear-gradient(135deg, rgba(107, 91, 149, 0.05), rgba(212, 165, 116, 0.05));">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Gentle reminders that actually help</h2>
+        <p class="section-subtitle">See how Zivvy keeps you on track without overwhelming you</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; margin-top: 48px; max-width: 900px; margin-left: auto; margin-right: auto;">
+        
+        <!-- Morning Notification -->
+        <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(107, 91, 149, 0.12); border: 1px solid rgba(107, 91, 149, 0.1);">
+          <div style="display: flex; align-items: center; margin-bottom: 12px;">
+            <div style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-right: 8px;"></div>
+            <span style="font-size: 12px; color: #666; font-weight: 600;">7:00 AM • ZIVVY</span>
+          </div>
+          <div style="font-weight: 700; color: #2C2546; margin-bottom: 8px; font-size: 16px;">Good morning! ☀️</div>
+          <div style="color: #4b5563; line-height: 1.5; font-size: 14px;">Today brings 3 chances to connect and play with Emma. Start when you're ready!</div>
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #f3f4f6;">
+            <span style="font-size: 12px; color: #6b7280;">Tap for today's schedule</span>
+          </div>
+        </div>
+
+        <!-- Activity Reminder -->
+        <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(107, 91, 149, 0.12); border: 1px solid rgba(107, 91, 149, 0.1);">
+          <div style="display: flex; align-items: center; margin-bottom: 12px;">
+            <div style="width: 8px; height: 8px; background: #f59e0b; border-radius: 50%; margin-right: 8px;"></div>
+            <span style="font-size: 12px; color: #666; font-weight: 600;">3:50 PM • ZIVVY</span>
+          </div>
+          <div style="font-weight: 700; color: #2C2546; margin-bottom: 8px; font-size: 16px;">Connection time approaching 💜</div>
+          <div style="color: #4b5563; line-height: 1.5; font-size: 14px;">Time to connect with Emma! 2 activities starting at 4:00 PM</div>
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #f3f4f6;">
+            <span style="font-size: 12px; color: #6b7280;">Speech practice • 15 minutes</span>
+          </div>
+        </div>
+
+        <!-- Evening Reflection -->
+        <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(107, 91, 149, 0.12); border: 1px solid rgba(107, 91, 149, 0.1);">
+          <div style="display: flex; align-items: center; margin-bottom: 12px;">
+            <div style="width: 8px; height: 8px; background: #8b5cf6; border-radius: 50%; margin-right: 8px;"></div>
+            <span style="font-size: 12px; color: #666; font-weight: 600;">8:00 PM • ZIVVY</span>
+          </div>
+          <div style="font-weight: 700; color: #2C2546; margin-bottom: 8px; font-size: 16px;">How did today feel? 🌙</div>
+          <div style="color: #4b5563; line-height: 1.5; font-size: 14px; margin-bottom: 16px;">Reflecting on therapy time with Emma</div>
+          <div style="display: flex; gap: 8px;">
+            <button style="flex: 1; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px; font-size: 12px; color: #374151;">😊 Felt good</button>
+            <button style="flex: 1; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px; font-size: 12px; color: #374151;">😐 Just okay</button>
+            <button style="flex: 1; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px; font-size: 12px; color: #374151;">😓 Challenging</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <p style="color: var(--text-mid); font-size: 14px; max-width: 500px; margin: 0 auto; line-height: 1.6;">
+          <strong>Just 3 gentle touchpoints per day.</strong> No spam, no pressure. 
+          Warm encouragement when you need it, celebration when you succeed.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Everything you need to stay consistent</h2>
+        <p class="section-subtitle">Built by parents who understand the juggle</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3 class="feature-title">Smart Scheduling</h3>
+          <p class="feature-description">
+            Automatically fits exercises around school, meals, and energy levels. 
+            Reschedule with one tap when life happens.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3 class="feature-title">Gentle Reminders</h3>
+          <p class="feature-description">
+            Thoughtful notifications that respect your time. 
+            Get a morning overview and 5-minute warnings before each activity.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Progress Tracking</h3>
+          <p class="feature-description">
+            See patterns emerge over weeks. Quick notes after each session 
+            help you share wins with therapists.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-title">Therapist Integration</h3>
+          <p class="feature-description">
+            Your therapist's exercises get priority scheduling. Share progress reports 
+            directly from the app.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">👨‍👩‍👧</div>
+          <h3 class="feature-title">Family-Friendly</h3>
+          <p class="feature-description">
+            Both parents can access the schedule. Grandparents and caregivers 
+            can follow along too.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3 class="feature-title">Celebration Mode</h3>
+          <p class="feature-description">
+            Acknowledge every small win. Build momentum with streaks 
+            and gentle encouragement.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Real families, real progress</h2>
+        <p class="section-subtitle">Join thousands of parents making therapy homework manageable</p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">
+            "Finally, everything in one place. No more guilt about forgotten exercises. 
+            We're actually consistent now, and my son is making progress."
+          </p>
+          <div class="testimonial-author">Sarah M., mom of 4-year-old</div>
+        </div>
+
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">
+            "The smart scheduling is brilliant. It knows not to schedule during meals 
+            or right before bedtime. Such thoughtful design."
+          </p>
+          <div class="testimonial-author">James P., dad of 6-year-old</div>
+        </div>
+
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">
+            "As an OT, I love that families actually follow through between sessions. 
+            The progress notes help me adjust our therapy plan."
+          </p>
+          <div class="testimonial-author">Dr. Emily R., Pediatric OT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF BAR -->
+  <section style="background: var(--purple); padding: 32px 0;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 32px;">
+        <div style="text-align: center; color: white;">
+          <div style="font-size: 2rem; font-weight: 700;">2,847</div>
+          <div style="font-size: 0.875rem; opacity: 0.9;">Families Active</div>
+        </div>
+        <div style="text-align: center; color: white;">
+          <div style="font-size: 2rem; font-weight: 700;">186,420</div>
+          <div style="font-size: 0.875rem; opacity: 0.9;">Exercises Completed</div>
+        </div>
+        <div style="text-align: center; color: white;">
+          <div style="font-size: 2rem; font-weight: 700;">92%</div>
+          <div style="font-size: 0.875rem; opacity: 0.9;">Stick With It</div>
+        </div>
+        <div style="text-align: center; color: white;">
+          <div style="font-size: 2rem; font-weight: 700;">4.9★</div>
+          <div style="font-size: 0.875rem; opacity: 0.9;">App Store Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Simple, affordable pricing</h2>
+        <p class="section-subtitle">Less than a cup of coffee, for peace of mind every day</p>
+      </div>
+
+      <div class="pricing-cards">
+        <div class="pricing-card featured">
+          <div class="pricing-badge">MOST POPULAR</div>
+          <h3>Family Plan</h3>
+          <div class="price">
+            $5
+            <span class="price-period">/month</span>
+          </div>
+          <p>Everything you need to stay consistent</p>
+          <ul class="pricing-features">
+            <li>Unlimited exercises & schedules</li>
+            <li>Smart reminders</li>
+            <li>Progress tracking</li>
+            <li>Family sharing</li>
+            <li>Therapist reports</li>
+            <li>24/7 support</li>
+          </ul>
+          <a href="#" class="btn btn-primary" style="width: 100%;">Start 5-Day Free Trial</a>
+          <p style="margin-top: 12px; color: var(--text-mid); font-size: 0.875rem;">
+            No credit card required
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENHANCED CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2>Your child's progress starts with <span class="gradient-text">one small step today</span></h2>
+      <p>Join thousands of parents who've gone from overwhelmed to organized</p>
+      
+      <div style="max-width: 500px; margin: 32px auto;">
+        <div style="background: white; border-radius: 16px; padding: 24px; box-shadow: var(--shadow-lg);">
+          <p style="color: var(--text-dark); font-weight: 600; margin-bottom: 16px;">
+            Start your free trial and get:
+          </p>
+          <ul style="text-align: left; list-style: none;">
+            <li style="margin-bottom: 8px;">✔ Your personalized schedule in 10 minutes</li>
+            <li style="margin-bottom: 8px;">✔ First week of gentle reminders</li>
+            <li style="margin-bottom: 8px;">✔ See if it works for YOUR family</li>
+            <li>✔ Cancel anytime, no questions asked</li>
+          </ul>
+        </div>
+      </div>
+      
+      <a href="#" class="btn btn-primary" style="font-size: 1.125rem; padding: 16px 40px;">
+        Start Your 5-Day Free Trial
+      </a>
+      <p style="font-size: 0.875rem; color: var(--text-mid); margin-top: 12px;">
+        No credit card required • Takes 10 minutes to set up
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background: #2C2546; color: white;">
+    <div style="max-width:1100px;margin:0 auto;padding:40px 28px;display:grid;gap:32px;grid-template-columns:1.1fr 1fr 1fr 1fr 1.2fr;align-items:start;">
+      <!-- Brand & tagline + socials -->
+      <div>
+        <h3 style="color:#C9E4B4;margin:0 0 12px 0;font-weight:700;letter-spacing:.5px;">Zivvy</h3>
+        <p style="color:rgba(255,255,255,0.85);margin:0 0 14px 0;max-width:260px;">
+          Making therapy homework manageable for families. Built by parents 💜 who understand the journey.
+        </p>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <a href="https://facebook.com/zivvyapp" aria-label="Facebook" target="_blank" rel="noopener"
+             style="display:inline-flex;width:32px;height:32px;border-radius:999px;background:#1877F2;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M22 12.06C22 6.505 17.523 2 12 2S2 6.505 2 12.06c0 5.012 3.657 9.165 8.438 9.94v-7.03H7.898v-2.91h2.54V9.845c0-2.5 1.492-3.89 3.777-3.89 1.094 0 2.238.196 2.238.196v2.47h-1.261c-1.243 0-1.63.776-1.63 1.57v1.884h2.773l-.443 2.91h-2.33v7.03C18.343 21.225 22 17.072 22 12.06z"/>
+            </svg>
+          </a>
+          <a href="https://instagram.com/zivvyapp" aria-label="Instagram" target="_blank" rel="noopener"
+             style="display:inline-flex;width:32px;height:32px;border-radius:8px;background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%);align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5a5.5 5.5 0 1 1 0 11.001 5.5 5.5 0 0 1 0-11zM18 6.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Product -->
+      <div>
+        <h4 style="color:white;font-weight:600;margin:0 0 16px 0;font-size:1.1rem;">Product</h4>
+        <ul style="list-style:none;padding:0;margin:0;color:rgba(255,255,255,0.85)">
+          <li style="margin-bottom:12px;"><a href="#features" style="color:inherit;text-decoration:none;">Features</a></li>
+          <li style="margin-bottom:12px;"><a href="#pricing" style="color:inherit;text-decoration:none;">Pricing</a></li>
+          <li style="margin-bottom:12px;"><a href="#demo" style="color:inherit;text-decoration:none;">Demo</a></li>
+          <li style="margin-bottom:12px;"><a href="#therapist-portal" style="color:inherit;text-decoration:none;">Therapist Portal</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div>
+        <h4 style="color:white;font-weight:600;margin:0 0 16px 0;font-size:1.1rem;">Support</h4>
+        <ul style="list-style:none;padding:0;margin:0;color:rgba(255,255,255,0.85)">
+          <li style="margin-bottom:12px;"><a href="#help" style="color:inherit;text-decoration:none;">Help Center</a></li>
+          <li style="margin-bottom:12px;"><a href="#getting-started" style="color:inherit;text-decoration:none;">Getting Started Guide</a></li>
+          <li style="margin-bottom:12px;"><a href="#contact-support" style="color:inherit;text-decoration:none;">Contact Support</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal & Trust -->
+      <div>
+        <h4 style="color:white;font-weight:600;margin:0 0 16px 0;font-size:1.1rem;">Legal & Trust</h4>
+        <ul style="list-style:none;padding:0;margin:0;color:rgba(255,255,255,0.85)">
+          <li style="margin-bottom:12px;"><a href="privacy.html" style="color:inherit;text-decoration:none;">Privacy Policy</a></li>
+          <li style="margin-bottom:12px;"><a href="terms.html" style="color:inherit;text-decoration:none;">Terms of Service</a></li>
+          <li style="margin-bottom:12px;"><a href="cookies.html" style="color:inherit;text-decoration:none;">Cookie Policy</a></li>
+          <li style="margin-bottom:12px;"><a href="security.html" style="color:inherit;text-decoration:none;">Security &amp; Data</a></li>
+          <li style="margin-bottom:12px;"><a href="accessibility.html" style="color:inherit;text-decoration:none;">Accessibility</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Us (compact) -->
+      <div>
+        <h4 style="color:white;font-weight:600;margin:0 0 16px 0;font-size:1.1rem;">Contact Us</h4>
+        <form id="contact-footer-form" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <input type="text" name="name" placeholder="Your Name *" required style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:#fff;" />
+          <input type="email" name="email" placeholder="Email *" required style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:#fff;" />
+          <input type="tel" name="phone" placeholder="Phone (optional)" style="grid-column:1 / span 2;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:#fff;" />
+          <textarea name="message" placeholder="Your Message *" required rows="3" style="grid-column:1 / span 2;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:#fff;"></textarea>
+          <button type="submit" style="grid-column:1 / span 2;padding:10px 14px;border-radius:12px;background:#8272C4;color:#fff;border:none;font-weight:700;cursor:pointer;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </footer>
+
+  <!-- At the very end of the footer, after the contact form -->
+</div>
+</footer>
+
+<!-- Add this copyright bar -->
+<div style="background: #1a1533; padding: 20px 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.1);">
+  <div class="container">
+    <p style="color: rgba(255,255,255,0.7); margin: 0; font-size: 14px;">
+      © 2024 Zivvy. Made with 💜 by parents, for parents.
+    </p>
+  </div>
+</div>
+
+  <!-- JavaScript for form handling with Netlify Functions -->
+  <script>
+  document.getElementById('contact-footer-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const data = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          message: formData.get('message')
+      };
+      
+      // Show loading state
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+      
+      try {
+          const response = await fetch('/.netlify/functions/send-email', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+              // Show success message
+              this.innerHTML = `
+                  <div style="grid-column: 1 / span 2; text-align: center; padding: 20px;">
+                      <div style="font-size: 32px; margin-bottom: 12px;">✅</div>
+                      <h3 style="color: #C9E4B4; margin-bottom: 8px;">Thank You!</h3>
+                      <p style="color: rgba(255,255,255,0.85); font-size: 14px;">
+                          We've received your message and will get back to you within 24 hours.
+                      </p>
+                  </div>
+              `;
+          } else {
+              throw new Error('Failed to send');
+          }
+      } catch (error) {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+          alert('Sorry, there was an error sending your message. Please try again or email us directly at hello@zivvy.app');
+      }
+  });
+  </script>
+
+</body>
+</html>
